@@ -1,4 +1,7 @@
 # devops-capstone-project
+
+![Build Status](https://github.com/shumaila774/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
+
 ## Customer Accounts Microservice
 
 This project develops a RESTful Customer Accounts
