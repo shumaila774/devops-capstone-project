@@ -230,3 +230,42 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data, [])
+    def test_method_not_allowed(self):
+        """It should return 405 for an unsupported HTTP method"""
+        response = self.client.patch(BASE_URL)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+        data = response.get_json()
+        self.assertEqual(data["error"], "Method not Allowed")
+
+    def test_internal_server_error(self):
+        """It should return 500 when an unexpected error occurs"""
+        from unittest.mock import patch
+        from service import app
+
+        original_testing = app.testing
+        original_propagate = app.config.get("PROPAGATE_EXCEPTIONS")
+
+        try:
+            app.testing = False
+            app.config["PROPAGATE_EXCEPTIONS"] = False
+
+            with patch(
+                "service.routes.Account.all",
+                side_effect=Exception("Test server error")
+            ):
+                response = self.client.get(BASE_URL)
+
+            self.assertEqual(
+                response.status_code,
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+            data = response.get_json()
+            self.assertEqual(data["error"], "Internal Server Error")
+        finally:
+            app.testing = original_testing
+            app.config["PROPAGATE_EXCEPTIONS"] = original_propagate
+
