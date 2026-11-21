@@ -188,6 +188,7 @@ class TestAccountService(TestCase):
             response.status_code,
             status.HTTP_400_BAD_REQUEST
         )
+
     def test_delete_account(self):
         """It should Delete an existing Account"""
         account = self._create_accounts(1)[0]
@@ -214,6 +215,7 @@ class TestAccountService(TestCase):
             response.status_code,
             status.HTTP_404_NOT_FOUND
         )
+
     def test_list_all_accounts(self):
         """It should List all Accounts"""
         accounts = self._create_accounts(3)
@@ -230,6 +232,7 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data, [])
+
     def test_method_not_allowed(self):
         """It should return 405 for an unsupported HTTP method"""
         response = self.client.patch(BASE_URL)
@@ -268,4 +271,3 @@ class TestAccountService(TestCase):
         finally:
             app.testing = original_testing
             app.config["PROPAGATE_EXCEPTIONS"] = original_propagate
-
