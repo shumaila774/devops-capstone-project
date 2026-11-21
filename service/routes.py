@@ -86,7 +86,32 @@ def read_account(account_id):
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
+def update_account(account_id):
+    """Update an existing Account"""
+    app.logger.info("Request to update Account with id: %s", account_id)
+
+    account = Account.find(account_id)
+
+    if not account:
+        return jsonify(message="Account not found"), status.HTTP_404_NOT_FOUND
+
+    check_content_type("application/json")
+    data = request.get_json()
+
+    required_fields = [
+        "name", "email", "address", "phone_number", "date_joined"
+    ]
+    if not isinstance(data, dict) or not all(
+        field in data for field in required_fields
+    ):
+        return jsonify(message="Invalid account data"), status.HTTP_400_BAD_REQUEST
+
+    account.deserialize(data)
+    account.update()
+
+    return jsonify(account.serialize()), status.HTTP_200_OK
+
 
 
 ######################################################################
