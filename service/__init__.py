@@ -13,7 +13,7 @@ from service.common import log_handlers
 
 # Create Flask application
 app = Flask(__name__)
-app.config.from_object(config)  
+app.config.from_object(config)
 # Configure security headers and CORS
 talisman = Talisman(app)
 CORS(app)
