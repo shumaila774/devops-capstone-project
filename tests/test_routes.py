@@ -11,7 +11,7 @@ from unittest import TestCase
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
-from service.routes import app 
+from service.routes import app
 from service import talisman
 
 DATABASE_URI = os.getenv(
@@ -36,7 +36,7 @@ class TestAccountService(TestCase):
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
         init_db(app)
-        
+
     @classmethod
     def tearDownClass(cls):
         """Runs once before test suite"""
